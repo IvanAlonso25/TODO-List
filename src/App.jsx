@@ -18,29 +18,18 @@ function App() {
     }
   }
 
-  function deleteTask() {
-    if (confirmTask()) {
-      document.getElementById('taskDone').remove();
+  function deleteTask(index) {
+    const newTasks = task.filter((_, i) => i !== index);
+    setTask(newTasks);
+  }
+
+  function markTask(index) {
+    const taskElement = document.querySelectorAll('li')[index];
+    const checkbox = taskElement.querySelector('input[type="checkbox"]');
+    if (checkbox.checked) {
+      taskElement.style.textDecoration = 'line-through';
     } else {
-      alert('Please confirm the task before deleting it');
-    }
-    document.getElementById('checkTask').checked = false;
-    document.getElementById('taskDone').style.textDecoration = 'none';
-  }
-
-  function confirmTask() {
-    if (document.getElementById('checkTask').checked) {
-      return true;
-    } else if (!document.getElementById('checkTask').checked) {
-      return false;
-    }
-  }
-
-  function markTask() {
-    if (document.getElementById('checkTask').checked) {
-      document.getElementById('taskDone').style.textDecoration = 'line-through';
-    } else if (!document.getElementById('checkTask').checked) {
-      document.getElementById('taskDone').style.textDecoration = 'none';
+      taskElement.style.textDecoration = 'none';
     }
   }
 
@@ -63,11 +52,11 @@ function App() {
       <div id='taskList' className='task-list'>
         <ul>
           {task.map((task, index) => (
-            <li id='taskDone' key={index}>
+            <li key={index}>
               {task}
               <div>
-                <input type="checkbox" id='checkTask' onChange={markTask} />
-                <button id='deleteTask' onClick={deleteTask}>
+                <input type="checkbox" onChange={() => markTask(index)} />
+                <button onClick={() => deleteTask(index)}>
                   <img src={img} alt='trash' />
                 </button>
               </div>
@@ -77,6 +66,6 @@ function App() {
       </div>
     </>
   )
-}
+};
 
 export default App
